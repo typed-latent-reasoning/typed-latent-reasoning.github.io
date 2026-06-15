@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tyler — Typed Latent Reasoning for Language Models</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F1EA;
+    --paper:#FBF9F5;
+    --ink:#1A1915;
+    --muted:#6B655B;
+    --line:#E3DCD0;
+    --accent:#CC785C;
+    --accent-soft:#E8CDBF;
+    --blue:#3B6EA5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;line-height:1.12;letter-spacing:-0.01em}
+
+  /* Nav */
+  nav{position:sticky;top:0;z-index:10;background:rgba(245,241,234,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-0.01em}
+  .brand b{color:var(--accent)}
+  .navlinks{display:flex;gap:26px}
+  .navlinks a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500}
+  .navlinks a:hover{color:var(--ink)}
+  @media(max-width:680px){.navlinks{display:none}}
+
+  /* Hero */
+  header{padding:88px 0 72px;text-align:center}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:6px 14px;border-radius:999px;margin-bottom:26px}
+  h1{font-size:clamp(38px,6.4vw,68px)}
+  h1 .tl{color:var(--accent)}
+  .tagline{font-family:'Fraunces',serif;font-size:clamp(19px,2.4vw,24px);color:var(--muted);font-weight:400;margin-top:18px;font-style:italic}
+  .authors{margin-top:30px;color:var(--muted);font-size:15px}
+  .authors b{color:var(--ink);font-weight:500}
+  .affil{font-size:13.5px;color:var(--muted);margin-top:4px}
+  .cta{margin-top:38px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:500;transition:.18s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:#b9664c}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* Stat strip */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:8px 0 0}
+  .stat{background:var(--paper);padding:28px 18px;text-align:center}
+  .stat .n{font-family:'Fraunces',serif;font-size:34px;font-weight:600;color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:6px}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* Sections */
+  section{padding:64px 0}
+  .lede{max-width:680px}
+  .kicker{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h2{font-size:clamp(28px,3.8vw,40px)}
+  section p{color:#3a382f;margin-top:18px;font-size:17px;max-width:680px}
+  .muted{color:var(--muted)}
+
+  figure{margin:36px 0 0}
+  figure img{width:100%;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:16px}
+  figcaption{font-size:13.5px;color:var(--muted);margin-top:12px;text-align:center}
+
+  /* Floated small figure */
+  .figfloat{float:right;width:42%;max-width:380px;margin:6px 0 18px 34px}
+  .figfloat img{width:100%;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:14px}
+  .figfloat figcaption{text-align:left;margin-top:10px}
+  .clear{clear:both}
+  @media(max-width:680px){.figfloat{float:none;width:100%;max-width:none;margin:28px 0 0}.figfloat figcaption{text-align:center}}
+
+  /* Operator cards */
+  .ops{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .op{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px;transition:.18s}
+  .op:hover{transform:translateY(-3px);border-color:var(--accent-soft)}
+  .op .sym{font-family:'Fraunces',serif;font-size:30px;color:var(--accent);font-style:italic}
+  .op h3{font-size:19px;margin-top:10px}
+  .op p{font-size:14.5px;color:var(--muted);margin-top:8px}
+  @media(max-width:760px){.ops{grid-template-columns:1fr}}
+
+  /* Stage flow */
+  .stages{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+  .stage{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px;position:relative}
+  .stage .tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+  .stage h3{font-size:21px;margin-top:8px}
+  .stage p{font-size:15px;color:var(--muted);margin-top:10px}
+  @media(max-width:680px){.stages{grid-template-columns:1fr}}
+
+  /* Results table */
+  .tablecard{margin-top:36px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--paper)}
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th,td{padding:13px 16px;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  thead th{background:#EFE9DF;font-weight:600;color:var(--ink);font-size:13px;letter-spacing:.02em}
+  tbody td{border-top:1px solid var(--line);color:#3a382f}
+  tbody tr.hl td{background:rgba(204,120,92,.09);font-weight:600;color:var(--ink)}
+  tbody tr.hl td:first-child{color:var(--accent)}
+  .delta{color:#3f8a52;font-size:12.5px;font-weight:600}
+
+  .twofig{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px}
+  @media(max-width:760px){.twofig{grid-template-columns:1fr}}
+  .twofig figure{margin:0}
+
+  /* Callout quote */
+  .callout{margin:38px 0 0;background:#FFFBE2;border:1px solid #E6DCA8;border-radius:14px;padding:26px 30px;position:relative}
+  .callout .q{font-family:'Fraunces',serif;font-size:clamp(19px,2.3vw,23px);font-style:italic;line-height:1.4;color:#3a382f}
+  .callout .src{font-size:13px;color:var(--muted);margin-top:12px;font-style:normal}
+
+  /* Findings list */
+  .findings{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:36px}
+  .finding{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  .finding h3{font-size:17px;margin-bottom:8px}
+  .finding p{font-size:14.5px;color:var(--muted);margin-top:0}
+  @media(max-width:680px){.findings{grid-template-columns:1fr}}
+
+  footer{border-top:1px solid var(--line);padding:46px 0;margin-top:30px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  footer p{color:var(--muted);font-size:14px}
+  footer a{color:var(--accent);text-decoration:none}
+  .divider{height:1px;background:var(--line);max-width:980px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><b>Tyler</b> · Typed Latent Reasoning</div>
+    <div class="navlinks">
+      <a href="#idea">Idea</a>
+      <a href="#operators">Operators</a>
+      <a href="#training">Training</a>
+      <a href="#results">Results</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Latent Reasoning · Language Models</span>
+    <h1><span class="tl">Tyler</span>: <span class="tl">Ty</span>ped <span class="tl">L</span>at<span class="tl">e</span>nt <span class="tl">R</span>easoning<br>for Language Models</h1>
+    <p class="tagline">When to think, what to compute, and how much to allocate.</p>
+    <div class="authors">
+      <b>Hanyu Lin</b><sup>1</sup><sup>*</sup> · <b>Min Cai</b><sup>2</sup><sup>*</sup> · <b>Jiawei Wen</b><sup>1</sup><sup>*</sup> · <b>Haodi Zhang</b><sup>1</sup>
+      <div class="affil"><sup>1</sup>Shenzhen University &nbsp;·&nbsp; <sup>2</sup>University of Alberta</div>
+      <div class="affil"><sup>*</sup>Equal contribution</div>
+    </div>
+    <div class="cta">
+      <a class="btn btn-primary" href="lcf_emnlp.pdf">Read the paper</a>
+      <a class="btn btn-ghost" href="#results">See results</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="n">+14.5</div><div class="l">points over CoT</div></div>
+    <div class="stat"><div class="n">+4.3</div><div class="l">over best baseline</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">typed operators</div></div>
+    <div class="stat"><div class="n">2.3</div><div class="l">forgetting score</div></div>
+  </div>
+</div>
+
+<section id="idea">
+  <div class="wrap">
+    <figure class="figfloat">
+      <img src="assets/comparsion.png" alt="Comparison of latent reasoning paradigms">
+      <figcaption>Prior methods rely on fixed-position latent tokens or external triggers. Tyler interleaves visible decoding with typed latent-operator calls during generation.</figcaption>
+    </figure>
+
+    <div class="kicker">The idea</div>
+    <h2>Reasoning that stays in latent space — on demand.</h2>
+    <p>Chain-of-thought makes a model write out every intermediate step as text. That's redundant and slow, and it forces a rigid interface: the model must spell out its reasoning before it can answer, instead of computing internally when needed.</p>
+    <p><b>Tyler</b> relaxes that interface. At each decoding step the model decides whether to emit a visible token or quietly switch to a <em>typed latent operator</em> that carries part of the computation in continuous representations. Prior latent-reasoning methods mostly focus on <em>how</em> to build latent tokens; Tyler instead reframes the problem as one of online control — <b>when</b> to think, <b>what</b> kind of computation to run, and <b>how much</b> budget to spend.</p>
+    <p class="muted">No fixed positions, no external trigger model. The choice between speaking and silently thinking competes inside a single next-action distribution, so the LLM itself stays in control.</p>
+
+    <div class="clear"></div>
+
+    <div class="callout">
+      <div class="q">“Can an LLM learn to interleave visible decoding with silent latent computation, while deciding when to think, what type of computation to perform, and how much budget to spend?”</div>
+      <div class="src">— The research question motivating Tyler</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="operators">
+  <div class="wrap">
+    <div class="lede">
+      <div class="kicker">Three typed operators</div>
+      <h2>Different steps do different jobs.</h2>
+      <p>Reasoning chains are functionally heterogeneous: some steps orient the problem, some update the evolving state, others reuse a procedure. Collapsing all of this into one undifferentiated latent vector throws that structure away. Tyler keeps it, with three operators whose <em>type</em> supplies an inductive bias while their behavior is learned from chain-of-thought data.</p>
+    </div>
+    <div class="ops">
+      <div class="op">
+        <div class="sym">O<sub>g</sub></div>
+        <h3>Global orientation</h3>
+        <p>Frames the problem and plans the approach — invoked at the start of generation.</p>
+      </div>
+      <div class="op">
+        <div class="sym">O<sub>s</sub></div>
+        <h3>State update</h3>
+        <p>Maintains local intermediate state, most active in early and middle reasoning stages.</p>
+      </div>
+      <div class="op">
+        <div class="sym">O<sub>p</sub></div>
+        <h3>Procedural abstraction</h3>
+        <p>Reuses solution patterns — appears more often as reasoning approaches the answer.</p>
+      </div>
+    </div>
+    <figure>
+      <img src="assets/lc-flow.png" alt="Tyler architecture and decoding flow">
+      <figcaption>At each step the policy emits a token or fires an operator, which synthesizes operator-conditioned latent tokens that guide subsequent decoding.</figcaption>
+    </figure>
+    <p>When an operator fires, a shared LoRA-augmented synthesizer turns the current context into latent tokens — the backbone weights stay frozen, so this is parameter-efficient. The operators share that synthesizer but specialize through their own query tokens and projection heads, which is what lets them transfer across reasoning domains rather than memorizing a task-specific output format.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="training">
+  <div class="wrap">
+    <div class="lede">
+      <div class="kicker">Two-stage training</div>
+      <h2>First teach the operators, then learn when to use them.</h2>
+      <p>Separating <em>what</em> each operator computes from <em>when</em> it should be called keeps training stable: Stage 1 gives the operators a clear functional identity, and Stage 2 only has to learn a sparse routing policy on top of a fixed latent interface. Both stages train on just 15K math problem–solution traces from OpenR1-Math.</p>
+    </div>
+    <div class="stages">
+      <div class="stage">
+        <div class="tag">Stage 1</div>
+        <h3>Align the operators</h3>
+        <p>The latent operators and synthesis module are trained with heuristic position supervision while the backbone LLM stays frozen, anchoring each operator to its intended role.</p>
+      </div>
+      <div class="stage">
+        <div class="tag">Stage 2</div>
+        <h3>Learn the policy</h3>
+        <p>A budget-aware invocation policy is optimized with GRPO. An operator-anchored auxiliary loss stabilizes learning at sparse invocation points.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="results">
+  <div class="wrap">
+    <div class="lede">
+      <div class="kicker">Results</div>
+      <h2>Consistent gains that transfer across domains.</h2>
+      <p>Trained only on math traces, Tyler still improves scientific and theorem-oriented reasoning — and tops every baseline on average across two backbones.</p>
+    </div>
+
+    <div class="tablecard">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>GSM8K</th><th>MATH-500</th><th>GPQA-D</th><th>TheoremQA</th><th>Average</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CoT</td><td>58.9</td><td>68.0</td><td>19.7</td><td>19.5</td><td>41.5</td></tr>
+          <tr><td>MemGen <span class="muted">(best baseline)</span></td><td>84.2</td><td>70.2</td><td>25.3</td><td>27.3</td><td>51.7</td></tr>
+          <tr class="hl"><td>Tyler</td><td>85.2</td><td>76.4</td><td>33.5</td><td>29.0</td><td>56.0 <span class="delta">↑14.5</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:14px;margin-top:14px">Pass@1 accuracy (%) on SmolLM3-3B. Tyler also reaches 65.8 average on Qwen3-4B, +9.2 over CoT.</p>
+
+    <p>The gains hold up where baselines wobble. SFT helps the smaller backbone but slightly hurts the larger one; GRPO and MemGen each win on one model and not the other. Tyler is the only method that lands the best average on <em>both</em> backbones — and the largest jumps come on the out-of-domain benchmarks it was never trained on, improving GPQA-Diamond over CoT by up to 27 points.</p>
+
+    <p>It also adapts well over time. Trained sequentially across code, science, math, and theorem-oriented tasks, Tyler finishes with the highest macro-average accuracy (39.8%, about +3.5 over the strongest baseline) while forgetting the least — a forgetting score of just 2.3, roughly 1.4 points better than MemGen.</p>
+
+    <div class="twofig">
+      <figure>
+        <img src="assets/fig_continual_learning_single.png" alt="Continual learning results">
+        <figcaption>Highest final accuracy with the lowest forgetting under sequential domain adaptation.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/fig_budget_sweep_dual_line.png" alt="Latent budget scaling">
+        <figcaption>Accuracy climbs sharply up to a budget of 5 latent calls, then plateaus.</figcaption>
+      </figure>
+    </div>
+
+    <div class="findings">
+      <div class="finding">
+        <h3>The operators really specialize</h3>
+        <p>Their latent representations form separate clusters, and removing each one produces a different failure mode — drop <em>O<sub>s</sub></em> and arithmetic/state errors rise; drop <em>O<sub>p</sub></em> and procedural errors appear.</p>
+      </div>
+      <div class="finding">
+        <h3>Routing is task-adaptive</h3>
+        <p>Harder problems trigger latent operators more often, and the policy follows a stage-aware rhythm: state updates dominate early, procedural abstractions take over near the answer.</p>
+      </div>
+    </div>
+
+    <figure>
+      <img src="assets/fig_math500_specialization_diagnostic.png" alt="Operator specialization diagnostics">
+      <figcaption>The three operators form distinct latent clusters, cause distinct error types when removed, and are invoked at distinct reasoning stages.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--ink);font-family:'Fraunces',serif">Tyler</b> — Typed Latent Reasoning for Language Models</p>
+    <p><a href="lcf_emnlp.pdf">Paper (PDF)</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
